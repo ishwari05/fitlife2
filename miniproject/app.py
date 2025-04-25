@@ -32,7 +32,7 @@ def datetimeformat(value, format='%B %d, %Y'):
     return value.strftime(format)
 
 # Configure Gemini API
-genai.configure(api_key='AIzaSyCsxiHYsmERU4C2RUKUkrJNDyITl2yUUbg')  # Using direct key for testing
+genai.configure(api_key='')  # Using direct key for testing
 model = genai.GenerativeModel('models/gemini-1.5-pro-latest')
 
 # PostgreSQL Database configuration
