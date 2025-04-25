@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - FitLife</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8d0cad;
+      --primary-light: #8d0cad83;
+      --secondary: #161b22;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --success: #238636;
+      --error: #f85149;
+      --border: #30363d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--primary-light), #0d1117);
+      color: var(--text);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(to right, var(--primary), #58a6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: #7a0b9a;
+      transform: translateY(-2px);
+    }
+
+    .dashboard-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+    }
+
+    .card {
+      background: var(--secondary);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .welcome-message {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+          <path d="M3 8h4v10a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V8"></path>
+          <circle cx="12" cy="4" r="2"></circle>
+        </svg>
+        <span class="logo-text">FitLife</span>
+      </a>
+      <div class="user-info">
+        <div class="user-avatar">{{ current_user.username[0]|upper }}</div>
+        <span>{{ current_user.username }}</span>
+      </div>
+    </header>
+
+    <div class="dashboard-content">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Account</h2>
+          </div>
+          <p>Email: {{ current_user.email }}</p>
+          <p>Member since: {{ current_user.created_at|datetimeformat }}</p>
+          <a href="{{ url_for('logout') }}" class="btn" style="margin-top: 1rem;">Logout</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Get Started</h2>
+            <a href="{{ url_for('index') }}" class="btn">New Recommendation</a>
+          </div>
+          <div style="padding: 2rem; text-align: center;">
+            <p>Welcome to FitLife! Create your first personalized fitness and diet recommendation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

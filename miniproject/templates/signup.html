@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - FitLife</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8d0cad;
+      --primary-light: #8d0cad83;
+      --secondary: #161b22;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --success: #238636;
+      --error: #f85149;
+      --border: #30363d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--primary-light), #0d1117);
+      color: var(--text);
+      padding: 20px;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-card {
+      background: var(--secondary);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .auth-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(to right, var(--primary), #58a6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .auth-header h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-header p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-form {
+      margin-top: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #0d1117;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(141, 12, 173, 0.3);
+    }
+
+    .password-strength {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+
+    .strength-meter {
+      height: 100%;
+      width: 0;
+      background: var(--error);
+      transition: all 0.3s ease;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 6px;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      background: #7a0b9a;
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .auth-footer {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .auth-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .auth-link:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      text-align: left;
+      display: none;
+    }
+
+    .success-message {
+      color: var(--success);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="/" class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M3 8h4v10a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V8"></path>
+            <circle cx="12" cy="4" r="2"></circle>
+          </svg>
+          <span class="logo-text">FitLife</span>
+        </a>
+        <h1>Create Your Account</h1>
+        <p>Start your fitness journey today</p>
+      </div>
+
+      <form id="signupForm" class="auth-form" action="{{ url_for('signup') }}" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
+          <div class="error-message" id="usernameError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required>
+          <div class="error-message" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Create a password" required>
+          <div class="password-strength">
+            <div class="strength-meter" id="strengthMeter"></div>
+          </div>
+          <div class="error-message" id="passwordError"></div>
+        </div>
+
+        <button type="submit" class="btn">Sign Up</button>
+        
+        <div class="success-message" id="successMessage"></div>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="{{ url_for('login') }}" class="auth-link">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('signupForm');
+      const usernameInput = document.getElementById('username');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const strengthMeter = document.getElementById('strengthMeter');
+      const usernameError = document.getElementById('usernameError');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      const successMessage = document.getElementById('successMessage');
+
+      // Password strength indicator and validation
+      passwordInput.addEventListener('input', function() {
+        const password = passwordInput.value;
+        let strength = 0;
+        let errors = [];
+        
+        // Check password requirements
+        if (password.length < 8) errors.push('at least 8 characters');
+        if (!password.match(/[A-Z]/)) errors.push('one uppercase letter');
+        if (!password.match(/[0-9]/)) errors.push('one number');
+        if (!password.match(/[^A-Za-z0-9]/)) errors.push('one special character');
+        
+        // Calculate strength
+        strength = 4 - errors.length;
+        const width = strength * 25;
+        strengthMeter.style.width = `${width}%`;
+        
+        // Update strength meter color
+        if (strength <= 1) {
+          strengthMeter.style.background = '#f85149'; // red
+        } else if (strength <= 2) {
+          strengthMeter.style.background = '#d29922'; // yellow
+        } else {
+          strengthMeter.style.background = '#3fb950'; // green
+        }
+        
+        // Show error tips if password is weak
+        if (errors.length > 0 && password.length > 0) {
+          passwordError.textContent = `Password needs ${errors.join(', ')}`;
+          passwordError.style.display = 'block';
+        } else {
+          passwordError.style.display = 'none';
+        }
+      });
+
+      // Form validation
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        let isValid = true;
+        
+        // Clear previous errors
+        usernameError.style.display = 'none';
+        emailError.style.display = 'none';
+        passwordError.style.display = 'none';
+        successMessage.style.display = 'none';
+
+        // Username validation
+        if (usernameInput.value.trim().length < 3) {
+          usernameError.textContent = 'Username must be at least 3 characters';
+          usernameError.style.display = 'block';
+          isValid = false;
+        }
+
+        // Email validation
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+          emailError.textContent = 'Please enter a valid email address';
+          emailError.style.display = 'block';
+          isValid = false;
+        }
+
+        // Password validation
+        const password = passwordInput.value;
+        let passwordErrors = [];
+        if (password.length < 8) passwordErrors.push('at least 8 characters');
+        if (!password.match(/[A-Z]/)) passwordErrors.push('one uppercase letter');
+        if (!password.match(/[0-9]/)) passwordErrors.push('one number');
+        if (!password.match(/[^A-Za-z0-9]/)) passwordErrors.push('one special character');
+        
+        if (passwordErrors.length > 0) {
+          passwordError.textContent = `Password must contain: ${passwordErrors.join(', ')}`;
+          passwordError.style.display = 'block';
+          isValid = false;
+        }
+
+        if (isValid) {
+          // Show loading state
+          const submitBtn = form.querySelector('button[type="submit"]');
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Creating account...';
+
+          // Simulate form submission (in a real app, this would be an actual form submission)
+          setTimeout(() => {
+            successMessage.textContent = 'Account created successfully! Redirecting...';
+            successMessage.style.display = 'block';
+            
+            // Reset form and button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign Up';
+            
+            // Redirect after 2 seconds
+            setTimeout(() => {
+              form.submit();
+            }, 2000);
+          }, 1500);
+        }
+      });
+
+      // Input focus effects
+      [usernameInput, emailInput, passwordInput].forEach(input => {
+        input.addEventListener('focus', function() {
+          this.style.borderColor = 'var(--primary)';
+        });
+        
+        input.addEventListener('blur', function() {
+          this.style.borderColor = 'var(--border)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

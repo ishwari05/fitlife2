@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Results - FitLife</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8d0cad;
+      --primary-light: #8d0cad83;
+      --secondary: #161b22;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --success: #238636;
+      --error: #f85149;
+      --border: #30363d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--primary-light), #0d1117);
+      color: var(--text);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-bottom: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(to right, var(--primary), #58a6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: #7a0b9a;
+      transform: translateY(-2px);
+    }
+
+    .result-card {
+      background: var(--secondary);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      margin-bottom: 1.5rem;
+    }
+
+    .result-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-header h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-header p {
+      color: var(--text-muted);
+    }
+
+    .result-section {
+      margin-bottom: 2rem;
+    }
+
+    .result-section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .result-content {
+      background: #0d1117;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .day-plan {
+      margin-bottom: 1.5rem;
+    }
+
+    .day-plan h3 {
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .result-content ul {
+      padding-left: 1.5rem;
+      list-style-type: none;
+    }
+
+    .result-content li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .result-content li:before {
+      content: "•";
+      color: var(--primary);
+      position: absolute;
+      left: 0;
+    }
+
+    .tips-list li {
+      margin-bottom: 0.75rem;
+    }
+
+    .workout-params {
+      background: rgba(141, 12, 173, 0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    .param-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .param {
+      flex: 1;
+    }
+
+    .param-label {
+      font-weight: 500;
+      color: var(--primary);
+      margin-right: 0.5rem;
+    }
+
+    .param-value {
+      color: var(--text);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.5px;
+    }
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 480px) {
+      .result-card {
+        padding: 1.5rem;
+      }
+      
+      .actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+          <path d="M3 8h4v10a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V8"></path>
+          <circle cx="12" cy="4" r="2"></circle>
+        </svg>
+        <span class="logo-text">FitLife</span>
+      </a>
+    </header>
+
+    <div class="result-card">
+      <div class="result-header">
+        <h1>Your Personalized Fitness Plan</h1>
+        <p>Generated on {{ recommendation_date }}</p>
+      </div>
+
+      <div class="result-section">
+        <h2><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+          <path d="M3 3v18h18"></path>
+          <path d="M18.7 8H12"></path>
+          <path d="M8 16l-4-4 4-4"></path>
+          <path d="M12 8h6.7"></path>
+        </svg> Diet Plan</h2>
+        <div class="result-content">
+            {% for day, meals in diet_plan.items() %}
+              <div class="day-plan">
+                <h3>{{ loop.index }}. {{ day }}</h3>
+                <ul>
+                  {% for meal in meals %}
+                    <li>{{ meal|safe }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endfor %}
+        </div>
+      </div>
+
+      <div class="result-section">
+        <h2><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+          <path d="M6 16.326A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.973"></path>
+          <path d="m9 16 3-3 3 3"></path>
+          <path d="M12 19v-7"></path>
+        </svg> Workout Routine</h2>
+        
+        <div class="workout-params">
+          <div class="param-row">
+            <div class="param">
+              <span class="param-label">Type:</span>
+              <span class="param-value">{{ workout_type }}</span>
+            </div>
+            <div class="param">
+              <span class="param-label">Split:</span>
+              <span class="param-value">{{ workout_split }}</span>
+            </div>
+          </div>
+          <div class="param-row">
+            <div class="param">
+              <span class="param-label">Frequency:</span>
+              <span class="param-value">{{ workout_frequency }} days/week</span>
+            </div>
+            <div class="param">
+              <span class="param-label">Duration:</span>
+              <span class="param-value">{{ workout_duration }} minutes/session</span>
+            </div>
+          </div>
+        </div>
+        <div class="result-content">
+            {% for day, exercises in workout_plan.items() %}
+              <div class="day-plan">
+                <h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  {{ loop.index }}. {{ day }}
+                </h3>
+                <ul class="exercise-list">
+                  {% for exercise in exercises %}
+                    <li>{{ exercise|safe }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endfor %}
+        </div>
+      </div>
+
+      <div class="result-section">
+        <h2><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg> Additional Tips</h2>
+        <div class="result-content">
+          <ul class="tips-list">
+            {% for tip in additional_tips %}
+              <li>{{ tip|safe }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>
+        <a href="{{ url_for('index') }}" class="btn" style="background: var(--secondary); border: 1px solid var(--primary);">Get New Recommendation</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

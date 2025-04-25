@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Recommendations - FitLife</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8d0cad;
+      --primary-light: #8d0cad83;
+      --secondary: #161b22;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --success: #238636;
+      --error: #f85149;
+      --border: #30363d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--primary-light), #0d1117);
+      color: var(--text);
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .card {
+      background: var(--secondary);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(to right, var(--primary), #58a6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #0d1117;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(141, 12, 173, 0.3);
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1em;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 6px;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      background: #7a0b9a;
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      text-align: left;
+      display: none;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .nav-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <a href="/" class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M3 8h4v10a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V8"></path>
+            <circle cx="12" cy="4" r="2"></circle>
+          </svg>
+          <span class="logo-text">FitLife</span>
+        </a>
+        <h1>Get Personalized Recommendations</h1>
+        <p>Answer a few questions to get your custom fitness plan</p>
+      </div>
+
+      <form id="recommendationForm" action="{{ url_for('get_recommendations') }}" method="POST">
+        <div class="form-group">
+          <label for="goal">Fitness Goal</label>
+          <select id="goal" name="goal" class="form-control" required>
+            <option value="" disabled selected>Select your goal</option>
+            <option value="weight_loss">Weight Loss</option>
+            <option value="muscle_gain">Muscle Gain</option>
+            <option value="endurance">Endurance Training</option>
+            <option value="maintenance">Maintenance</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="level">Fitness Level</label>
+          <select id="level" name="level" class="form-control" required>
+            <option value="" disabled selected>Select your level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="preferences">Dietary Preferences</label>
+          <select id="preferences" name="preferences" class="form-control" required>
+            <option value="" disabled selected>Select your preferences</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+            <option value="omnivore">Omnivore</option>
+            <option value="keto">Keto</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="allergies">Allergies/Dietary Restrictions</label>
+          <input type="text" id="allergies" name="allergies" class="form-control" placeholder="List any allergies or restrictions">
+        </div>
+
+        <div class="form-group">
+          <label for="workout_type">Workout Type</label>
+          <select id="workout_type" name="workout_type" class="form-control" required>
+            <option value="" disabled selected>Select workout type</option>
+            <option value="weightlifting">Weightlifting</option>
+            <option value="bodyweight">Bodyweight/Calisthenics</option>
+            <option value="hiit">HIIT</option>
+            <option value="cardio">Cardio</option>
+            <option value="yoga">Yoga/Pilates</option>
+            <option value="sports">Sports-specific</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="workout_split">Workout Split</label>
+          <select id="workout_split" name="workout_split" class="form-control" required>
+            <option value="" disabled selected>Select workout split</option>
+            <option value="full_body">Full Body</option>
+            <option value="push_pull_legs">Push/Pull/Legs</option>
+            <option value="upper_lower">Upper/Lower</option>
+            <option value="bro_split">Bro Split</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="workout_frequency">Workout Frequency (days/week)</label>
+          <input type="number" id="workout_frequency" name="workout_frequency" class="form-control" min="1" max="7" required>
+        </div>
+
+        <div class="form-group">
+          <label for="workout_duration">Workout Duration (minutes)</label>
+          <input type="number" id="workout_duration" name="workout_duration" class="form-control" min="15" max="180" required>
+        </div>
+
+        <button type="submit" class="btn">Get Recommendations</button>
+      </form>
+
+      <div class="nav-links">
+        <a href="{{ url_for('dashboard') }}" class="nav-link">View Dashboard</a>
+        <a href="{{ url_for('login') }}" class="nav-link">Account Settings</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('recommendationForm');
+      
+      form.addEventListener('submit', function(e) {
+        // Form validation would go here
+        // For now just submit the form
+      });
+    });
+  </script>
+</body>
+</html>
