@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 # Configure Gemini API
-genai.configure(api_key=os.getenv('AIzaSyCsxiHYsmERU4C2RUKUkrJNDyITl2yUUbg'))
+genai.configure(api_key=os.getenv(''))
 model = genai.GenerativeModel('gemini-pro')
 
 # PostgreSQL Database configuration
